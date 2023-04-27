@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
@@ -25,6 +27,9 @@ public class FutureServiceImpl implements FutureService {
     @Autowired
     @Qualifier("asyncInvokeExecutor")
     private TaskExecutor invokeExecutor;
+
+    @Resource(name = "redisTemplate")
+    private RedisTemplate<Object, Object> redisTemplate;
 
     private static final String FIELD_IS_FAVORITE = "isFavorite";
     private static final String FIELD_SCHEDULED = "scheduled";
@@ -49,6 +54,9 @@ public class FutureServiceImpl implements FutureService {
         futureMap.put(FIELD_ORDER_STATE, getOrderStateFuture());
         Thread.sleep(3000);
         setThirdFieldVal(layoutEntry, futureMap);
+        redisTemplate.opsForValue().set("testKey", "testVal", 3, TimeUnit.HOURS);
+        Object testValue = redisTemplate.opsForValue().get("testKey");
+        log.info("get testValue from redis value = {}", testValue);
         return layoutEntry;
     }
 

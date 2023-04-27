@@ -162,7 +162,7 @@ public class ThreadTest {
 
     //wait()方法是Object类的方法，该方法是用来将当前线程置入“预执行队列”中，
     // 并且在wait()所在的代码处停止执行，直到接到通知或被中断为止。
-    // 释放锁和Cpu，等待其他线程执行objectLock.notifyAll(),
+    // 释放锁和Cpu，等待其他线程执行 objectLock.notifyAll(),
     // 收到notifyAll消息后，当前线程再次回到Synchronized行代码与其他线程竞争这个锁
     private static class ThreadTask implements Runnable {
         @Override

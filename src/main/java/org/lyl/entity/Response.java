@@ -30,7 +30,7 @@ public class Response<T> implements Serializable {
     }
 
 
-    public static Response success() {
+    public static Response<Void> success() {
        return new Response<>(CommonConst.SUCCESS_CODE, CommonConst.SUCCESS_MSG);
     }
 
@@ -40,21 +40,21 @@ public class Response<T> implements Serializable {
         return rep;
     }
 
-    public static Response error() {
-        return new Response(CommonConst.COMMON_ERROR_CODE, CommonConst.COMMON_ERROR_MSG);
+    public static Response<Void> error() {
+        return new Response<>(CommonConst.COMMON_ERROR_CODE, CommonConst.COMMON_ERROR_MSG);
     }
 
 
-    public static Response error(Integer errorCode) {
-        return new Response(errorCode, CommonConst.COMMON_ERROR_MSG);
+    public static Response<Void> error(Integer errorCode) {
+        return new Response<>(errorCode, CommonConst.COMMON_ERROR_MSG);
     }
 
-    public static Response error(String errorMsg) {
-        return new Response(CommonConst.COMMON_ERROR_CODE, errorMsg);
+    public static Response<Void> error(String errorMsg) {
+        return new Response<>(CommonConst.COMMON_ERROR_CODE, errorMsg);
     }
 
-    public static Response error(Integer errorCode, String errorMsg) {
-        return new Response(errorCode, errorMsg);
+    public static Response<Void> error(Integer errorCode, String errorMsg) {
+        return new Response<>(errorCode, errorMsg);
     }
 
 

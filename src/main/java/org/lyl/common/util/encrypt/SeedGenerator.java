@@ -1,6 +1,4 @@
-package org.lyl.encrypt;
-
-import org.lyl.common.util.ChangeCodeUtil;
+package org.lyl.common.util.encrypt;
 
 import java.util.Random;
 

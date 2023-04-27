@@ -3,6 +3,7 @@ package org.lyl.config;
 import com.alibaba.rocketmq.shade.com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.lyl.common.util.encrypt.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
@@ -43,20 +44,10 @@ public class ReqDeDupHelper {
         }
 
         String dupJsonStr = objectMapper.writeValueAsString(paramMap);
-        String md5deDupStr = jdkMD5(dupJsonStr);
+        String md5deDupStr = CommonUtil.jdkMD5(dupJsonStr);
         log.debug("md5deDupParam = {}, excludeKeys = {}", md5deDupStr, dupJsonStr);
         return md5deDupStr;
     }
 
-    private static String jdkMD5(String src) {
-        String res = null;
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            byte[] mdBytes = messageDigest.digest(src.getBytes());
-            res = DatatypeConverter.printHexBinary(mdBytes);
-        } catch (Exception e) {
-            log.error("jdk md have error------>",e);
-        }
-        return res;
-    }
+
 }

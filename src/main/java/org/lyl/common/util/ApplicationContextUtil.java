@@ -6,6 +6,12 @@ import org.springframework.context.ApplicationContextAware;
 
 import java.util.Map;
 
+
+/**
+ *
+ * Spring容器工具
+ *
+ */
 public class ApplicationContextUtil implements ApplicationContextAware {
 
     private static ApplicationContext context;

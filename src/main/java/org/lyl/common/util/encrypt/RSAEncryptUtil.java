@@ -1,4 +1,4 @@
-package org.lyl.encrypt;
+package org.lyl.common.util.encrypt;
 
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;

@@ -22,6 +22,7 @@ public class JacksonUtil {
         return objectMapper.getTypeFactory().constructParametricType(originalType, parameterTypes);
     }
 
+
     /**
      * 通过简单类型获取一个简单的JavaType
      *
@@ -31,6 +32,7 @@ public class JacksonUtil {
     public static JavaType getSimpleType(Class<?> clazz) {
         return objectMapper.getTypeFactory().constructType(clazz);
     }
+
 
     /**
      * 通过一有的Javatype，构建一个复杂的多重泛型JavaType
@@ -45,6 +47,8 @@ public class JacksonUtil {
     }
 
 
+
+
     // object ----> jsonStr
     public static String obj2Json(Object obj) {
         String jsonStr = null;
@@ -55,6 +59,7 @@ public class JacksonUtil {
         }
         return jsonStr;
     }
+
 
     // jsonStr ----> object
     public static <T> T readJson2Obj(String jsonData, JavaType javaType) {

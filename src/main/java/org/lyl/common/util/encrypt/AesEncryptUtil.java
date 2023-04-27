@@ -1,5 +1,6 @@
-package org.lyl.encrypt;
+package org.lyl.common.util.encrypt;
 
+import lombok.extern.slf4j.Slf4j;
 import org.lyl.common.util.ChangeCodeUtil;
 
 import javax.crypto.Cipher;
@@ -9,9 +10,9 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
-import java.util.Random;
 import java.util.Scanner;
 
+@Slf4j
 public class AesEncryptUtil {
 
     private static final String ECB_PKCS5_PAD = "AES/ECB/PKCS5Padding";
@@ -59,8 +60,8 @@ public class AesEncryptUtil {
         byte[] encryptBytes = encryptCipher.doFinal(content.getBytes(StandardCharsets.UTF_8));
         String encryptResult = ChangeCodeUtil.byteArrayToHex(encryptBytes);
 
-        System.out.println("encryptWithECBNoVi current content is =" + content);
-        System.out.println("encryptWithECBNoVi encrypt HexResult is =" +encryptResult);
+        log.info("encryptWithECBNoVi current content is = {}", content);
+        log.info("encryptWithECBNoVi encrypt HexResult is = {}", encryptResult);
         return encryptResult;
     }
 
@@ -81,8 +82,8 @@ public class AesEncryptUtil {
         byte[] decryptByte = decryptCipher.doFinal(encryptedBytes);
         String decryptResult = new String(decryptByte, StandardCharsets.UTF_8);
 
-        System.out.println("decryptWithECBNoVi current encryptedData is =" + encryptedHexData);
-        System.out.println("decryptWithECBNoVi decrypt result is =" +decryptResult);
+        log.info("decryptWithECBNoVi current encryptedData is = {}", encryptedHexData);
+        log.info("decryptWithECBNoVi decrypt result is = {} ", decryptResult);
         return decryptResult;
     }
 
@@ -108,8 +109,8 @@ public class AesEncryptUtil {
         byte[] encryptBytes = encryptCipher.doFinal(content.getBytes(StandardCharsets.UTF_8));
         String encryptResult = String.format("%s*%s", ChangeCodeUtil.byteArrayToHex(seedByte), ChangeCodeUtil.byteArrayToHex(encryptBytes));
 
-        System.out.println("encryptCBCModeDynamicSalt current content is =" + content);
-        System.out.println("encryptCBCModeDynamicSalt encrypt result is =" + encryptResult);
+        log.info("encryptCBCModeDynamicSalt current content is = {}", content);
+        log.info("encryptCBCModeDynamicSalt encrypt result is = {}", encryptResult);
         return encryptResult;
     }
 
@@ -135,8 +136,8 @@ public class AesEncryptUtil {
         byte[] decryptedBytes = decryptCipher.doFinal(encryptedBytes);
         String decryptResult = new String(decryptedBytes, StandardCharsets.UTF_8);
 
-        System.out.println("decryptCBCModeDynamicSalt current encryptedData is =" + hexContent);
-        System.out.println("decryptCBCModeDynamicSalt decryptResult =" + decryptResult);
+        log.info("decryptCBCModeDynamicSalt current encryptedData is = {}", hexContent);
+        log.info("decryptCBCModeDynamicSalt decryptResult = {}", decryptResult);
         return decryptResult;
     }
 
