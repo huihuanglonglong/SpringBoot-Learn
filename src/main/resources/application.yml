@@ -16,3 +16,46 @@ spring:
         min-idle: 0
         max-idle: 8
         max-wait: -1
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    username: root
+    password: LYL@383x66lyl
+    url: jdbc:mysql://127.0.0.1:3306/db_learn?characterEncoding=utf-8&serverTimezone=UTC
+
+    druid:
+      initialSize: 6
+      minIdle: 5
+      maxActive: 20
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 30000
+      validationQuery: select 1 from dual
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

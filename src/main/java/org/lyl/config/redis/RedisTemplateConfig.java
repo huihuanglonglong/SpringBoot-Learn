@@ -1,4 +1,4 @@
-package org.lyl.config;
+package org.lyl.config.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;

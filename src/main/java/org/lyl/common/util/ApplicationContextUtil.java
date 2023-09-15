@@ -3,6 +3,7 @@ package org.lyl.common.util;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import java.util.Map;
  * Spring容器工具
  *
  */
+@Component
 public class ApplicationContextUtil implements ApplicationContextAware {
 
     private static ApplicationContext context;
@@ -22,7 +24,7 @@ public class ApplicationContextUtil implements ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.context = applicationContext;
-
+        // org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext
     }
 
 

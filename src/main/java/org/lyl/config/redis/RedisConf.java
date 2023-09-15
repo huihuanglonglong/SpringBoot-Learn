@@ -1,4 +1,4 @@
-package org.lyl.config;
+package org.lyl.config.redis;
 
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Value;

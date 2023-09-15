@@ -1,4 +1,4 @@
-package org.lyl.config;
+package org.lyl.config.redis;
 
 import com.alibaba.rocketmq.shade.com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -23,9 +23,4 @@ public class JacksonMapperConfig {
         return objectMapper;
     }
 
-
-    @Autowired
-    private JedisCluster jedisCluster;
-
-
 }
