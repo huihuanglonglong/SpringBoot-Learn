@@ -7,9 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 
 @MapperScan()
+@EnableAsync
 @ServletComponentScan
 @SpringBootApplication()
 public class LearnProjectMainClass {

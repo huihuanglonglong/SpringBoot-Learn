@@ -14,7 +14,6 @@ import javax.annotation.Resource;
 import java.util.concurrent.Executor;
 
 @Configuration
-@EnableAsync
 @DependsOn("asyncInvokeExecutor")
 public class ThreadAsyncConfig implements AsyncConfigurer {
 
