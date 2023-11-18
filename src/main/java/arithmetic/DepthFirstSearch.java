@@ -26,7 +26,7 @@ public class DepthFirstSearch {
      *  2、顺延叶子节点路径向上添加节点
      */
     public static void arrayBinaryTreeMinRoad() {
-        List<Integer> dataList = ArithmeticUtil.getSingleList();
+        List<Integer> dataList = ArithmeticUtil.getSingleList("arrayBinaryTreeMinRoad");
 
         int minIndex = dfsGetMinIndex(dataList, 0);
 

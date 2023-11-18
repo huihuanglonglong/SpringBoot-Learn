@@ -29,6 +29,7 @@ public class ArithmeticUtil {
     public static List<List<Integer>> getDoubleList() {
         Scanner inScan  = new Scanner(System.in);
         String dataStr = inScan.nextLine();
+        inScan.close();
         dataStr= dataStr.substring(2, dataStr.length() - 2);
 
         List<List<Integer>> doubleList = new ArrayList<>();
@@ -43,10 +44,11 @@ public class ArithmeticUtil {
     }
 
     // 获取单表
-    public static List<Integer> getSingleList() {
+    public static List<Integer> getSingleList(String useName) {
         Scanner inScan  = new Scanner(System.in);
-        System.out.println("getSingleList please input listData split by ', '");
+        System.out.println("getSingleList please input listData split by ', '; name = "+ useName);
         String dataStr = inScan.nextLine();
+        inScan.close();
 
         List<Integer> singleList = new ArrayList<>();
         Arrays.stream(dataStr.split(", ")).forEach(x -> singleList.add(Integer.valueOf(x)));
@@ -69,7 +71,7 @@ public class ArithmeticUtil {
             String[] inStr = inScan.nextLine().split(", ");
             if (inStr.length != gridRow) {
                 System.out.println("current row num = " + inStr.length + ", but gridRow = " + gridRow);
-                return gridData;
+                throw new RuntimeException("grid Row error");
             }
             for (int j = 0; j < gridRow; j++) {
                 gridData[i][j] = Integer.parseInt(inStr[j]);

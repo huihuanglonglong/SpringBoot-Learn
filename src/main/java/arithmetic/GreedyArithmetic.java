@@ -15,7 +15,7 @@ public class GreedyArithmetic {
      *
      */
     public static void stockMaxProfitWithFee() {
-        List<Integer> dataList = ArithmeticUtil.getSingleList();
+        List<Integer> dataList = ArithmeticUtil.getSingleList("stockMaxProfitWithFee");
 
         int fee = dataList.get(dataList.size() -1);
         int dataLen = dataList.size() - 1;
