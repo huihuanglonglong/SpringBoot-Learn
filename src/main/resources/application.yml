@@ -4,6 +4,8 @@ server:
 #redis集群
 # 虚拟机连接一定要看看这个文章：https://blog:51cto:com/u_15773996/5639612
 spring:
+  application:
+    name: springBoot-learn-lyl
   redis:
     timeout: 20000
     password: 123456
