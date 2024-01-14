@@ -3,13 +3,14 @@ package org.lyl.common.util;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
 
 import java.io.IOException;
 
 @Slf4j
 public class JacksonUtil {
 
-    private static ObjectMapper objectMapper = ApplicationContextUtil.getBean(ObjectMapper.class);
+    private static final ObjectMapper OBJECT_MAPPER = ApplicationContextUtil.getBean(ObjectMapper.class);
 
     /**
      * 获取集合类型的JavaType
@@ -19,7 +20,7 @@ public class JacksonUtil {
      * @return
      */
     public static JavaType getCollectionType(Class<?> originalType, Class<?>... parameterTypes) {
-        return objectMapper.getTypeFactory().constructParametricType(originalType, parameterTypes);
+        return OBJECT_MAPPER.getTypeFactory().constructParametricType(originalType, parameterTypes);
     }
 
 
@@ -30,7 +31,7 @@ public class JacksonUtil {
      * @return
      */
     public static JavaType getSimpleType(Class<?> clazz) {
-        return objectMapper.getTypeFactory().constructType(clazz);
+        return OBJECT_MAPPER.getTypeFactory().constructType(clazz);
     }
 
 
@@ -43,9 +44,30 @@ public class JacksonUtil {
      * @return
      */
     public static JavaType getComplexType(Class<?> originalType, JavaType complexType) {
-        return objectMapper.getTypeFactory().constructParametricType(originalType, complexType);
+        return OBJECT_MAPPER.getTypeFactory().constructParametricType(originalType, complexType);
     }
 
+    /**
+     * JavaType 转 Spring.TypeReference
+     *
+     * @param javaType
+     * @param <T>
+     * @return
+     */
+    public static <T> ParameterizedTypeReference<T> getRtnTyp(JavaType javaType) {
+        return ParameterizedTypeReference.forType(javaType);
+    }
+
+    /**
+     * JavaType在RestTemplate中的使用方式
+     *
+     * JavaType rowType = getCollectionType(List.class, String.class);
+     * HttpRequestUtil.postInvoke("url", new HttpHeaders(), StringUtils.EMPTY, getRtnType(rowType));
+     *
+     *
+     * @param obj
+     * @return
+     */
 
 
 
@@ -53,7 +75,7 @@ public class JacksonUtil {
     public static String obj2Json(Object obj) {
         String jsonStr = null;
         try {
-            jsonStr = objectMapper.writeValueAsString(obj);
+            jsonStr = OBJECT_MAPPER.writeValueAsString(obj);
         } catch (Exception e) {
             log.error("jacksonUtil write str have error------>", e);
         }
@@ -65,7 +87,7 @@ public class JacksonUtil {
     public static <T> T readJson2Obj(String jsonData, JavaType javaType) {
         T data = null;
         try {
-            data = objectMapper.readValue(jsonData, javaType);
+            data = OBJECT_MAPPER.readValue(jsonData, javaType);
         } catch (IOException e) {
             log.error("readJson2Obj have error------>", e);
         }

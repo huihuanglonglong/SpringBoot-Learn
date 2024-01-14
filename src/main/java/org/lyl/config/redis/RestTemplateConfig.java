@@ -1,5 +1,6 @@
 package org.lyl.config.redis;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import org.apache.http.Header;
 import org.apache.http.client.HttpClient;
@@ -13,13 +14,18 @@ import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicHeader;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.Resource;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Configuration
@@ -29,11 +35,14 @@ public class RestTemplateConfig {
 
     private static String HTTPS_PRO = "https";
 
+    @Resource
+    private ObjectMapper objectMapper;
+
     /**
      * http连接管理器
      * @return
      */
-    @Bean
+    @Bean("httpConnectionManager")
     @Primary
     public HttpClientConnectionManager poolingHttpClientConnectionManager() {
         //注册http和https请求
@@ -52,15 +61,15 @@ public class RestTemplateConfig {
 
     /**
      * HttpClient
-     * @param poolingConnectionManager
+     * @param connectionManager
      * @return
      */
-    @Bean
+    @Bean("primaryHttpClient")
     @Primary
-    public HttpClient httpClient(HttpClientConnectionManager poolingConnectionManager) {
+    public HttpClient httpClient(@Qualifier("httpConnectionManager") HttpClientConnectionManager connectionManager) {
         HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
         // 设置http连接管理器
-        httpClientBuilder.setConnectionManager(poolingConnectionManager);
+        httpClientBuilder.setConnectionManager(connectionManager);
 
         // 设置重试次数
         httpClientBuilder.setRetryHandler(new DefaultHttpRequestRetryHandler(3, true));
@@ -77,9 +86,9 @@ public class RestTemplateConfig {
      * @param httpClient
      * @return
      */
-    @Bean
+    @Bean("httpRequestFactory")
     @Primary
-    public ClientHttpRequestFactory clientHttpRequestFactory(HttpClient httpClient) {
+    public ClientHttpRequestFactory clientHttpRequestFactory(@Qualifier("primaryHttpClient") HttpClient httpClient) {
         HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
         // httpClient创建器
         clientHttpRequestFactory.setHttpClient(httpClient);
@@ -96,16 +105,23 @@ public class RestTemplateConfig {
 
     /**
      * rest模板
+     * boot中可使用RestTemplateBuilder.build创建
+     *
      * @return
      */
     @Bean("restTemplate")
     @Primary
-    public RestTemplate restTemplate(ClientHttpRequestFactory clientHttpRequestFactory) {
-        // boot中可使用RestTemplateBuilder.build创建
+    public RestTemplate restTemplate(@Qualifier("httpRequestFactory") ClientHttpRequestFactory httpRequestFactory) {
         RestTemplate restTemplate = new RestTemplate();
-        // 配置请求工厂
-        restTemplate.setRequestFactory(clientHttpRequestFactory);
+        restTemplate.setRequestFactory(httpRequestFactory);
+
+        List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
+        messageConverters.removeIf(converter -> converter instanceof MappingJackson2HttpMessageConverter);
+        MappingJackson2HttpMessageConverter jacksonHttpConverter = new MappingJackson2HttpMessageConverter(objectMapper);
+        jacksonHttpConverter.setDefaultCharset(StandardCharsets.UTF_8);
+        messageConverters.add(jacksonHttpConverter);
         return restTemplate;
+
     }
 
 }
