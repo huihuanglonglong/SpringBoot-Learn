@@ -10,7 +10,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 
-@MapperScan()
+//@MapperScan()
 @EnableAsync
 @ServletComponentScan
 @SpringBootApplication()
