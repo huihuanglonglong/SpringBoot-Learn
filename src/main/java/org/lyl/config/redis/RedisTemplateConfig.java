@@ -18,7 +18,7 @@ import redis.clients.jedis.JedisPoolConfig;
 @EnableCaching
 public class RedisTemplateConfig extends CachingConfigurerSupport {
 
-   @Autowired
+    @Autowired
     private ObjectMapper objectMapper;
 
 

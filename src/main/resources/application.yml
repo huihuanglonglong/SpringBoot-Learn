@@ -1,5 +1,7 @@
 server:
   port: 1800
+  servlet:
+    context-path: /spring-learning
 
 #redis集群
 # 虚拟机连接一定要看看这个文章：https://blog:51cto:com/u_15773996/5639612
@@ -35,10 +37,32 @@ spring:
       minEvictableIdleTimeMillis: 30000
       validationQuery: select 1 from dual
 
+#Spring-Boot服务日志配置
+#Spring-Boot服务日志默认使用logback
+#pom依赖层次关系
+#spring-boot-starter-web <<< spring-boot-starter <<< spring-boot-parent <<< spring-boot-dependencies
+#修改默认日志-自定义：https://blog.csdn.net/qq_39187538/article/details/122730145
+# 自动归档(参考：https://blog.csdn.net/qq_41287063/article/details/118580999)
 
-
-
-
+logging:
+  # 根路劲日志级别
+  level:
+    root: info
+  file: '${user.dir}/logging/${spring.application.name}-spring.log'
+  pattern:
+    # 日志记录格式[时间戳] [日志级别] [类名.方法名] [消息文本]
+    file: '%d{yyyy-MM-dd HH:mm:ss:SSS} [%thread] %-5level %logger{36}.%M:%L - %msg%n'
+    console: '%d{yyyy-MM-dd HH:mm:ss:SSS} [%thread] %-5level %logger{36}.%M:%L - %msg%n'
+  logback:
+    rollingpolicy:
+      # 根据文件大小归档，超过2KB自动归档，次日启动服务时也会自动归档
+      file-name-pattern: '${user.dir}/logging/%d{yyyyMMdd}/${spring.application.name}.log.%d{yyyy-MM-dd}.%i.gz'
+      # 最大日志文件大小(默认为10MB，这里为了测试归档，暂时设置为2KB)
+      max-file-size: 2KB
+      # 要保留的日志备份的总大小(默认为0B)
+      total-size-cap: 1GB
+      # 保存存档日志文件的最大天数(默认为7天)
+      max-history: 20
 
 
 
