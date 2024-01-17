@@ -39,6 +39,10 @@ public class DateTimeUtil {
         TIME_FORMATTER_MAP.put(NUM_MILLIS_FORMAT, DateTimeFormatter.ofPattern(NUM_MILLIS_FORMAT));
     }
 
+    public static String getCurrentTimeByFormat(String format) {
+        return LocalDateTime.now().format(TIME_FORMATTER_MAP.get(format));
+    }
+
     // 获取当前时区的Date
     public static Date getCurrentZoneDate() {
         return Date.from(LocalDateTime.now().atZone(DEFAULT_ZONE_ID).toInstant());

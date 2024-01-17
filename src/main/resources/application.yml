@@ -7,20 +7,20 @@ server:
 # 虚拟机连接一定要看看这个文章：https://blog:51cto:com/u_15773996/5639612
 spring:
   application:
-    name: springBoot-learn-lyl
+    name: springBoot-learn
   redis:
     timeout: 20000
     password: 123456
     cluster:
       nodes: 192.168.137.7:7001,192.168.137.7:7002,192.168.137.7:7003,192.168.137.7:8001,192.168.137.7:8002,192.168.137.7:8003
-    #默认值是5 一般当此值设置过大时，容易报：Too many Cluster redirections
+    # 默认值是5 一般当此值设置过大时，容易报：Too many Cluster redirections
     lettuce:
       pool:
         max-active: 8
         min-idle: 0
         max-idle: 8
         max-wait: -1
-
+  # 数据库连接
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
@@ -48,21 +48,22 @@ logging:
   # 根路劲日志级别
   level:
     root: info
-  file: '${user.dir}/logging/${spring.application.name}-spring.log'
+  file:
+    path: ${user.dir}/logging
+    name: ${user.dir}/logging/spring.log
+    # 要保留的日志备份的总大小(默认为0B)
+    total-size-cap: 1GB
+    # 最大日志文件大小(默认为10MB，这里为了测试归档，暂时设置为2KB)
+    max-file-size: 2MB
+    # 保存存档日志文件的最大天数(默认为7天)
+    max-history: 20
   pattern:
     # 日志记录格式[时间戳] [日志级别] [类名.方法名] [消息文本]
-    file: '%d{yyyy-MM-dd HH:mm:ss:SSS} [%thread] %-5level %logger{36}.%M:%L - %msg%n'
-    console: '%d{yyyy-MM-dd HH:mm:ss:SSS} [%thread] %-5level %logger{36}.%M:%L - %msg%n'
-  logback:
-    rollingpolicy:
-      # 根据文件大小归档，超过2KB自动归档，次日启动服务时也会自动归档
-      file-name-pattern: '${user.dir}/logging/%d{yyyyMMdd}/${spring.application.name}.log.%d{yyyy-MM-dd}.%i.gz'
-      # 最大日志文件大小(默认为10MB，这里为了测试归档，暂时设置为2KB)
-      max-file-size: 2KB
-      # 要保留的日志备份的总大小(默认为0B)
-      total-size-cap: 1GB
-      # 保存存档日志文件的最大天数(默认为7天)
-      max-history: 20
+    file: '[%thread: %X{traceId}] %-5level %logger{36}.%M:%L - %msg%n'
+    console: '[%thread: %X{traceId}] %-5level %logger{36}.%M:%L - %msg%n'
+    # 根据文件大小归档，超过2KB自动归档，次日启动服务时也会自动归档
+    rolling-file-name: ${user.dir}/logging/%d{yyyyMMdd}/springLog-%d{yyyy-MM-dd}.%i.gz
+
 
 
 

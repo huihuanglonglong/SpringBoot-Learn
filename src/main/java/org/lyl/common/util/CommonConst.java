@@ -9,4 +9,6 @@ public interface CommonConst {
     Integer COMMON_ERROR_CODE = -1;
 
     String COMMON_ERROR_MSG = "FAIL";
+
+    String COMMON_TRACE_ID = "traceId";
 }
