@@ -10,6 +10,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @Configuration
@@ -29,28 +30,36 @@ public class ThreadPoolConfig {
         executor.setQueueCapacity(2000);
         // 设置线程活跃时间（秒）
         executor.setKeepAliveSeconds(60);
-        // 设置默认线程名称, 在设置了线程工厂的场景无效
-        executor.setThreadNamePrefix("org-asyncExecutor---");
         // 设置拒绝策略
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         // 等待所有任务结束后再关闭线程池, 线程池不关闭
         executor.setWaitForTasksToCompleteOnShutdown(false);
         // 自定义线程工厂用于异常处理
-        executor.setThreadFactory(customThreadFactory());
+        executor.setThreadFactory(new CustomThreadFactory("asyncExecutor-"));
         return executor;
     }
 
 
 
-    private ThreadFactory customThreadFactory() {
-        ThreadFactory factory = (Runnable r) -> {
-            Thread t = new Thread(r);
+
+    private static final class CustomThreadFactory implements ThreadFactory {
+
+        private final String threadPoolPrefix;
+
+        private final AtomicInteger threadNum = new AtomicInteger(1);
+
+        public CustomThreadFactory(String threadPoolPrefix) {
+            this.threadPoolPrefix = threadPoolPrefix;
+        }
+
+        @Override
+        public Thread newThread(Runnable r) {
+            Thread newThread = new Thread(r,threadPoolPrefix + threadNum.getAndIncrement());
             Thread.setDefaultUncaughtExceptionHandler((Thread thread, Throwable e) -> {
                 log.error("asyncInvokeExecutor execute have error------>", e);
             });
-            return t;
-        };
-        return factory;
+            return newThread;
+        }
     }
 
 
