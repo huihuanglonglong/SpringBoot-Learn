@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 
 import java.io.IOException;
+import java.util.Map;
 
 @Slf4j
 public class JacksonUtil {
@@ -94,6 +95,12 @@ public class JacksonUtil {
         return data;
     }
 
+
+
+    public static <T> T map2Object(Map<String, Object> dataMap, Class<T> clazz) throws Exception {
+        String jsonStr = OBJECT_MAPPER.writeValueAsString(dataMap);
+        return OBJECT_MAPPER.readValue(jsonStr, clazz);
+    }
 
 
 }

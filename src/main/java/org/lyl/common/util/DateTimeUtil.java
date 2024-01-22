@@ -145,32 +145,41 @@ public class DateTimeUtil {
     // 参考：https://blog.csdn.net/qq_42582773/article/details/127554933
     // https://blog.csdn.net/weixin_55365140/article/details/118219902
     // https://blog.csdn.net/TreeShu321/article/details/100183584
+
+    /**
+     *         String zeroTime = getCurrentStandardZeroTime();
+     *         System.out.println("zeroTime = " + zeroTime);
+     *
+     *         zeroTime = getCurrentDiffDay(-9, DateTimeUtil.STANDARD_MONTH_FORMAT);
+     *         System.out.println("current diff day = " + zeroTime);
+     *
+     *         zeroTime = getDiffDayZeroTime(-90, DateTimeUtil.STANDARD_TIME_FORMAT);
+     *         System.out.println("current diff time = " + zeroTime);
+     *
+     *         zeroTime = getCurrentDiffDay(-90, DateTimeUtil.STANDARD_TIME_FORMAT);
+     *         Date startDate = strToDateByFormat(zeroTime, DateTimeUtil.STANDARD_TIME_FORMAT);
+     *         List<String> monthList = getYearMonthList(startDate, new Date(), DateTimeUtil.STANDARD_MONTH_FORMAT);
+     *         monthList.forEach(System.out::println);
+     *
+     *         String utcTimeStr = getCurrentUTCTimeStr();
+     *         System.out.println("utcTimeStr = " + utcTimeStr );
+     *         String localMilliTime = getCurrentStandardMillisTime();
+     *         System.out.println("localMilliTime = " + localMilliTime);
+     *
+     *         String localTime = utcTimeStr2LocalTime(utcTimeStr, DateTimeUtil.STANDARD_UTC_FORMAT, DateTimeUtil.STANDARD_MILLIS_FORMAT);
+     *         System.out.println("localTime = " + localTime);
+     *
+     *         utcTimeStr = date2UTCTimeStr(new Date());
+     *         System.out.println("current date2UTCTimeStr = " + utcTimeStr);
+     *
+     * @param args
+     */
     public static void main(String[] args) {
-        String zeroTime = getCurrentStandardZeroTime();
-        System.out.println("zeroTime = " + zeroTime);
-
-        zeroTime = getCurrentDiffDay(-9, DateTimeUtil.STANDARD_MONTH_FORMAT);
-        System.out.println("current diff day = " + zeroTime);
-
-        zeroTime = getDiffDayZeroTime(-90, DateTimeUtil.STANDARD_TIME_FORMAT);
-        System.out.println("current diff time = " + zeroTime);
-
-        zeroTime = getCurrentDiffDay(-90, DateTimeUtil.STANDARD_TIME_FORMAT);
-        Date startDate = strToDateByFormat(zeroTime, DateTimeUtil.STANDARD_TIME_FORMAT);
-        List<String> monthList = getYearMonthList(startDate, new Date(), DateTimeUtil.STANDARD_MONTH_FORMAT);
-        monthList.forEach(System.out::println);
-
-        String utcTimeStr = getCurrentUTCTimeStr();
-        System.out.println("utcTimeStr = " + utcTimeStr );
-        String localMilliTime = getCurrentStandardMillisTime();
-        System.out.println("localMilliTime = " + localMilliTime);
-
-        String localTime = utcTimeStr2LocalTime(utcTimeStr, DateTimeUtil.STANDARD_UTC_FORMAT, DateTimeUtil.STANDARD_MILLIS_FORMAT);
-        System.out.println("localTime = " + localTime);
-
-        utcTimeStr = date2UTCTimeStr(new Date());
-        System.out.println("current date2UTCTimeStr = " + utcTimeStr);
-
+        String str = "Hello?World&Java";
+        String[] result = str.split("\\?"); // 注意需要转义"&"为"\&"
+        for (int i=0; i<result.length; i++) {
+            System.out.println(result[i]);
+        }
     }
 
 }

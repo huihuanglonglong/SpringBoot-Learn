@@ -1,5 +1,6 @@
 package org.lyl.common.util;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -38,6 +39,12 @@ public class ApplicationContextUtil implements ApplicationContextAware {
     public static <T> Map<String, T> getBeansByType(Class<T> clazz) {
         Map<String, T> beanMap = context.getBeansOfType(clazz);
         return beanMap;
+    }
+
+    // 配置文件获取配置项
+    public static <T> T getProperty(String propertyKey, Class<T> targetType, T defaultVal) {
+        T property = context.getEnvironment().getProperty(propertyKey, targetType);
+        return ObjectUtils.isEmpty(targetType)? defaultVal : property;
     }
 
 

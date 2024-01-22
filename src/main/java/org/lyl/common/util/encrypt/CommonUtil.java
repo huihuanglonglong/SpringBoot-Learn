@@ -1,10 +1,16 @@
 package org.lyl.common.util.encrypt;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.xml.bind.DatatypeConverter;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.TreeMap;
 
 @Slf4j
 public class CommonUtil {
@@ -37,5 +43,68 @@ public class CommonUtil {
         }
         return sb.toString();
     }
+
+
+    /**
+     * 从rul中构建参数map
+     *
+     * @param
+     * @return
+     */
+    public static Map<String, Object> getParamMapByUrl(String url) {
+        Map<String, Object> paramMap = new HashMap<>();
+        if (StringUtils.isBlank(url)) {
+            return paramMap;
+        }
+
+        String[] urlArray = url.split("\\?");
+        if (urlArray.length == 1 && !urlArray[0].contains("=")) {
+            return paramMap;
+        }
+
+        String paramUri = (urlArray.length == 1 && urlArray[0].contains("="))? urlArray[0] : urlArray[1];
+        String[] keyValuePairs = paramUri.split("\\&");
+        for (String pair : keyValuePairs) {
+            String[] keyValue = pair.split("=", 2);
+            paramMap.put(keyValue[0], keyValue[1]);
+        }
+        return paramMap;
+    }
+
+
+    public static String buildSortedParamStr(Map params) {
+        if (MapUtils.isEmpty(params)) {
+            return StringUtils.EMPTY;
+        }
+        params.remove(null);
+        if (MapUtils.isEmpty(params)) {
+            return StringUtils.EMPTY;
+        }
+
+        TreeMap<String, String> tempMap = new TreeMap<>();
+        params.forEach((key, value) -> tempMap.put((String) key, Objects.isNull(value)? StringUtils.EMPTY : (String) value));
+
+
+        StringBuilder buf = new StringBuilder();
+        for (String key : tempMap.keySet()) {
+            buf.append(key).append("=").append(tempMap.get(key)).append("&");
+        }
+        return buf.substring(0, buf.length() - 1);
+    }
+
+
+    public static void main(String[] args) {
+        String url = "https://localhost:8000/test1?key5=val5&key4=val4&key1=val1&key2=val2&key3=val3";
+
+        Map<String, Object> paramMap = getParamMapByUrl(url);
+        System.out.println(paramMap);
+
+        String sortedParamStr = buildSortedParamStr(paramMap);
+        System.out.println("sortedParamStr = " +sortedParamStr);
+    }
+
+
+
+
 
 }
