@@ -51,18 +51,20 @@ logging:
   file:
     path: ${user.dir}/logging
     name: ${user.dir}/logging/spring.log
-    # 要保留的日志备份的总大小(默认为0B)
-    total-size-cap: 1GB
-    # 最大日志文件大小(默认为10MB，这里为了测试归档，暂时设置为2KB)
-    max-file-size: 2MB
-    # 保存存档日志文件的最大天数(默认为7天)
-    max-history: 20
   pattern:
     # 日志记录格式[时间戳] [日志级别] [类名.方法名] [消息文本]
-    file: '[%thread: %X{traceId}] %-5level %logger{36}.%M:%L - %msg%n'
-    console: '[%thread: %X{traceId}] %-5level %logger{36}.%M:%L - %msg%n'
-    # 根据文件大小归档，超过2KB自动归档，次日启动服务时也会自动归档
-    rolling-file-name: ${user.dir}/logging/%d{yyyyMMdd}/springLog-%d{yyyy-MM-dd}.%i.gz
+    file: '[%thread:%d{yyyy-MM-dd HH:mm:ss}: %X{traceId}] %-5level %logger{36}.%M:%L - %msg%n'
+    console: '[%thread:%d{yyyy-MM-dd HH:mm:ss}: %X{traceId}] %-5level %logger{36}.%M:%L - %msg%n'
+    # 根据文件大小归档，超过max-size自动归档，次日启动服务时也会自动归档
+    rolling-file-name: ${user.dir}/logging/log-%d{yyyyMMdd}-%i.gz
+  logback:
+    rollingpolicy:
+      # 最大日志文件大小(20M, 该值必须小于total-size-cap不然历史日志无法删除)
+      max-size: 20MB
+      # (rolling-file-name)路径下要保留的日志备份的总大小(默认为0MB)
+      total-size-cap: 40MB
+      # 保存存档日志文件的最大天数(默认为7天)
+      max-history: 1
 
 
 
