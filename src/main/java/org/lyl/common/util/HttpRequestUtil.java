@@ -1,7 +1,8 @@
 package org.lyl.common.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.alibaba.rocketmq.shade.com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -28,27 +29,39 @@ public class HttpRequestUtil {
 
 
     // 通过post方式调用
-    public static <T> T postInvoke(String reqUrl, HttpHeaders headers, String reqParamJson, ParameterizedTypeReference<T> rtnType) {
-        HttpEntity<String> reqEntity = getStrHttpEntity(reqUrl, headers, reqParamJson);
+    public static <T> T postInvoke(String reqUrl, HttpHeaders headers, Map<String, Object> reqParam, ParameterizedTypeReference<T> rtnType) {
+        HttpEntity<String> reqEntity = getHttpEntity(reqUrl, headers, reqParam);
         if (reqEntity == null) {
             return null;
         }
-        return invokeByRtnType(reqUrl, HttpMethod.POST, reqEntity, rtnType);
+        return invokeByRtnType(reqUrl, HttpMethod.POST, reqEntity, null, rtnType);
     }
 
     // 通过Get方式调用
-    public static <T> T getInvoke(String reqUrl, HttpHeaders headers, String reqParamJson, ParameterizedTypeReference<T> rtnType) {
-        HttpEntity<String> reqEntity = getStrHttpEntity(reqUrl, headers, reqParamJson);
+    public static <T> T getInvoke(String reqUrl, HttpHeaders headers, Map<String, Object> reqParams, ParameterizedTypeReference<T> rtnType) {
+        HttpEntity<String> reqEntity = getHttpEntity(reqUrl, headers, null);
         if (reqEntity == null) {
             return null;
         }
-        return invokeByRtnType(reqUrl, HttpMethod.GET, reqEntity, rtnType);
+        reqUrl = reBuildReqUrl(reqUrl, reqParams);
+        return invokeByRtnType(reqUrl, HttpMethod.GET, reqEntity, reqParams, rtnType);
+    }
+
+    //Get请求涉及到路径参数拼接，但是参数值如果是json格式就存在“{}”两个字符的和路径参数模板冲突，所以必须要构建Uri模板
+    private static String reBuildReqUrl(String reqUrl, Map<String, Object> reqParam) {
+        if (MapUtils.isNotEmpty(reqParam)) {
+            StringBuilder sb = new StringBuilder(reqUrl + "?");
+            reqParam.keySet().forEach(paramKey ->
+                    sb.append(paramKey).append("=").append("{").append(paramKey).append("}").append("&"));
+            reqUrl = sb.substring(0, sb.length()-1);
+        }
+        return reqUrl;
     }
 
     // 获取一个str类型的请求体
-    private static HttpEntity<String> getStrHttpEntity (String reqUrl, HttpHeaders headers, String reqParamJson) {
-        if (StringUtils.isBlank(reqUrl) || StringUtils.isBlank(reqParamJson)) {
-            log.warn("post invoke param Empty, reqUrl = {}, reqParam = {}", reqUrl, reqParamJson);
+    private static HttpEntity<String> getHttpEntity(String reqUrl, HttpHeaders headers, Map<String, Object> reqParams) {
+        if (StringUtils.isBlank(reqUrl) && MapUtils.isEmpty(reqParams)) {
+            log.warn("post invoke param Empty, reqUrl = {}, reqParam = {}", reqUrl, reqParams);
             return null;
         }
 
@@ -56,7 +69,7 @@ public class HttpRequestUtil {
         if (Objects.isNull(headers)) {
             headers = getHeaders(null);
         }
-        HttpEntity<String> reqEntity = new HttpEntity<>(reqParamJson, headers);
+        HttpEntity<String> reqEntity = new HttpEntity<>(JSON.toJSONString(reqParams), headers);
         return reqEntity;
     }
 
@@ -71,10 +84,11 @@ public class HttpRequestUtil {
      * @param <T>
      * @return
      */
-    public static <T> T invokeByRtnType(String reqUrl, HttpMethod reqMethod, HttpEntity<String> reqEntity, ParameterizedTypeReference<T> rtnType) {
+    public static <T> T invokeByRtnType(String reqUrl, HttpMethod reqMethod, HttpEntity<String> reqEntity,
+                                        Map<String, Object> uriParams, ParameterizedTypeReference<T> rtnType) {
         ResponseEntity<T> response = null;
         try {
-            response = restTemplate.exchange(reqUrl, reqMethod, reqEntity, rtnType);
+            response = restTemplate.exchange(reqUrl, reqMethod, reqEntity, rtnType, uriParams);
         } catch (Exception e) {
             log.error("invokeByRtnType reqUrl = {}, have error------>", reqUrl, e);
         }
