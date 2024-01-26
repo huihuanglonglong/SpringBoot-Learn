@@ -1,6 +1,7 @@
 package org.lyl.common.util;
 
 import com.alibaba.rocketmq.shade.com.alibaba.fastjson.JSON;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -34,7 +35,7 @@ public class HttpRequestUtil {
         if (reqEntity == null) {
             return null;
         }
-        return invokeByRtnType(reqUrl, HttpMethod.POST, reqEntity, null, rtnType);
+        return invokeByRtnType(reqUrl, HttpMethod.POST, reqEntity, Maps.newHashMap(), rtnType);
     }
 
     // 通过Get方式调用
