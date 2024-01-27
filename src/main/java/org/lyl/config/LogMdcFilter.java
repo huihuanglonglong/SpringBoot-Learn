@@ -47,7 +47,7 @@ public class LogMdcFilter implements Filter {
         log.info("enter LogMdcFilter destroy method...");
     }
 
-    private String buildMDCTraceId() {
+    public static String buildMDCTraceId() {
         String millis = DateTimeUtil.getCurrentTimeByFormat(DateTimeUtil.NUM_MILLIS_FORMAT);
         String uuId = UUID.randomUUID().toString().replace("-", "").substring(17);
         return millis + uuId;

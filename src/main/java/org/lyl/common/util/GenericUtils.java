@@ -1,4 +1,4 @@
-package org.lyl.common.util.generic;
+package org.lyl.common.util;
 
 import com.google.common.collect.Lists;
 
