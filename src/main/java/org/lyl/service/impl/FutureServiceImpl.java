@@ -24,8 +24,7 @@ import java.util.function.BiConsumer;
 @Service
 public class FutureServiceImpl implements FutureService {
 
-    @Autowired
-    @Qualifier("asyncInvokeExecutor")
+    @Resource(name = "threadPoolMDCExecutor")
     private TaskExecutor invokeExecutor;
 
     @Resource(name = "redisTemplate")
@@ -74,8 +73,8 @@ public class FutureServiceImpl implements FutureService {
 
     private Future getIsFavoriteFuture(){
         CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
-            String threadName = Thread.currentThread().getName() + "---isFavorite";
-            System.out.println(threadName+" have execute!!!");
+            String threadName = Thread.currentThread().getName();
+            log.info("getIsFavoriteFuture threadName = {} have execute...", threadName);
             return Boolean.TRUE;
         }, invokeExecutor);
         return future;
@@ -83,8 +82,8 @@ public class FutureServiceImpl implements FutureService {
 
     private Future getScheduledFuture(){
         CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
-            String threadName = Thread.currentThread().getName() + "---scheduled";
-            System.out.println(threadName+" have execute!!!");
+            String threadName = Thread.currentThread().getName();
+            log.info("getScheduledFutureb threadName = {} have execute...", threadName);
             return Boolean.TRUE;
         }, invokeExecutor);
         return future;
@@ -92,32 +91,12 @@ public class FutureServiceImpl implements FutureService {
 
     private Future getOrderStateFuture(){
         CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
-            String threadName = Thread.currentThread().getName() + "---isFavorite";
-            System.out.println(threadName+" have execute!!!");
+            String threadName = Thread.currentThread().getName();
+            log.info("getOrderStateFuture threadName = {} have execute...", threadName);
             return 100;
         }, invokeExecutor);
         return future;
     }
-
-
-    private void test(){
-        CompletableFuture.supplyAsync(() -> 100)
-                .thenApply(x -> x + 200).thenApply(x -> x *2)
-                .whenComplete((x, e) -> log.error("test future have Exception----->", e));
-        List<String> strList = new ArrayList<String>(){
-            {
-                add("Math");
-                add("English");
-            }
-        };
-        LayoutEntry entry = new LayoutEntry(){
-            {
-                setIsFavorite(Boolean.TRUE);
-                setOrderState(Integer.MAX_VALUE);
-            }
-        };
-    }
-
 
 
 }

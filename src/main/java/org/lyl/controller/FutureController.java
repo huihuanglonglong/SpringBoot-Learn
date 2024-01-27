@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -20,6 +21,8 @@ public class FutureController {
     @PostMapping("/testFuture")
     public Object testFuture() throws Exception {
         log.info("enter testFuture method.....");
-        return futureService.testFuture();
+        Object result = futureService.testFuture();
+        log.info("end testFuture method.....");
+        return result;
     }
 }

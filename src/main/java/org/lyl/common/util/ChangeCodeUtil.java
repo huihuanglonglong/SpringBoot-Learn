@@ -1,6 +1,6 @@
 package org.lyl.common.util;
 
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.stream.Stream;
 
@@ -26,7 +26,7 @@ public class ChangeCodeUtil {
      */
     public static byte[] hex2ByteArray(String hexString) {
         hexString = hexString.replaceAll(" ", "");
-        if (StringUtils.isEmpty(hexString) || hexString.length() % 2 != 0) {
+        if (StringUtils.isBlank(hexString) || hexString.length() % 2 != 0) {
             return new byte[0];
         }
 
