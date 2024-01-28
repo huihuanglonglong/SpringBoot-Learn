@@ -19,7 +19,7 @@ public class AesEncryptUtil {
 
     private static final String CBC_PKCS5_PAD = "AES/CBC/PKCS5Padding";
 
-    private static final String SOURCE_KEY = "AES_sourceKey";
+    private static final String SOURCE_KEY = "AES_sourceKey#2024";
 
 
     /**
@@ -40,8 +40,8 @@ public class AesEncryptUtil {
         decryptWithECB(encryptData);*/
 
         // 测试CBC模式
-        String encryptData = encryptCBCModeDynamicSalt(testData);
-        decryptCBCModeDynamicSalt(encryptData);
+        String encryptData = encryptCBCModeDynamicSalt(SOURCE_KEY, testData);
+        decryptCBCModeDynamicSalt(SOURCE_KEY, encryptData);
         //Stream.iterate(0, i -> i+1).limit(1000).forEach(i -> getSeedByRandom());
     }
 
@@ -51,8 +51,8 @@ public class AesEncryptUtil {
      * @return
      * @throws Exception
      */
-    public static String encryptWithECB(String content) throws Exception {
-        SecretKey secretKey = generateKey(SOURCE_KEY, "AES");
+    public static String encryptWithECB(String sourceKey, String content) throws Exception {
+        SecretKey secretKey = generateKey(sourceKey, "AES");
 
         Cipher encryptCipher = Cipher.getInstance(ECB_PKCS5_PAD);
         encryptCipher.init(Cipher.ENCRYPT_MODE, secretKey);
@@ -72,8 +72,8 @@ public class AesEncryptUtil {
      * @return
      * @throws Exception
      */
-    public static String decryptWithECB(String encryptedHexData) throws Exception {
-        SecretKey secretKey = generateKey(SOURCE_KEY, "AES");
+    public static String decryptWithECB(String sourceKey, String encryptedHexData) throws Exception {
+        SecretKey secretKey = generateKey(sourceKey, "AES");
 
         Cipher decryptCipher = Cipher.getInstance(ECB_PKCS5_PAD);
         decryptCipher.init(Cipher.DECRYPT_MODE,secretKey);
@@ -97,12 +97,12 @@ public class AesEncryptUtil {
      * @return
      * @throws Exception
      */
-    public static String encryptCBCModeDynamicSalt(String content) throws Exception {
+    public static String encryptCBCModeDynamicSalt(String sourceKey, String content) throws Exception {
         SecureRandom random= SecureRandom.getInstance("SHA1PRNG");
         byte[] seedByte = new byte[16];
         random.nextBytes(seedByte);
 
-        SecretKey secretKey = generateKey(SOURCE_KEY, "AES");
+        SecretKey secretKey = generateKey(sourceKey, "AES");
         Cipher encryptCipher = Cipher.getInstance(CBC_PKCS5_PAD);
         encryptCipher.init(Cipher.ENCRYPT_MODE, secretKey, new IvParameterSpec(seedByte));
 
@@ -123,14 +123,14 @@ public class AesEncryptUtil {
      * @return
      * @throws Exception
      */
-    public static String decryptCBCModeDynamicSalt(String hexContent) throws Exception {
+    public static String decryptCBCModeDynamicSalt(String sourceKey, String hexContent) throws Exception {
         String[] hexArray = hexContent.split("\\*");
         byte[] saltBytes = ChangeCodeUtil.hex2ByteArray(hexArray[0]);
         byte[] encryptedBytes = ChangeCodeUtil.hex2ByteArray(hexArray[1]);
 
 
         Cipher decryptCipher = Cipher.getInstance(CBC_PKCS5_PAD);
-        SecretKey secretKey = generateKey(SOURCE_KEY, "AES");
+        SecretKey secretKey = generateKey(sourceKey, "AES");
 
         decryptCipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(saltBytes));
         byte[] decryptedBytes = decryptCipher.doFinal(encryptedBytes);
