@@ -1,4 +1,4 @@
-package org.lyl.common.thread;
+package org.lyl.test;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;

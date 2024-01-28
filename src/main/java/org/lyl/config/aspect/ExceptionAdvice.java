@@ -1,4 +1,4 @@
-package org.lyl.config.advice;
+package org.lyl.config.aspect;
 
 import org.lyl.entity.Response;
 import org.springframework.web.bind.annotation.ExceptionHandler;

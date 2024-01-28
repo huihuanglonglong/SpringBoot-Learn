@@ -24,6 +24,7 @@
      </parent>
 
     <dependencies>
+        <!-- springWeb依赖 -->
        <dependency>
            <groupId>org.springframework.boot</groupId>
            <artifactId>spring-boot-starter-web</artifactId>
@@ -158,12 +159,19 @@
             <version>1.2.14</version>
         </dependency>
 
-<!--        <dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+            <version>2.5.1</version>
+        </dependency>
+
+        <!--
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>logback-spring-boot-starter</artifactId>
             <version>2.4.0.RELEASE</version>
-        </dependency>-->
-
+        </dependency>
+        -->
 
     </dependencies>
 
