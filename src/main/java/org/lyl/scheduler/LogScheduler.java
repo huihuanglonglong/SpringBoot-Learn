@@ -21,7 +21,6 @@ public class LogScheduler {
             log.info("test logStr currentTime = {}, loop = {}, testLog = {}", currentTime, i, logStr);
             resultTimes = i;
         }
-        resultTimes = resultTimes / 0;
         return resultTimes;
     }
 

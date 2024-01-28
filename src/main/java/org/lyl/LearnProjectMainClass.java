@@ -12,6 +12,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @ServletComponentScan
 @EnableWebMvc
 @SpringBootApplication
+@EnableTransactionManagement // 开启事务注解扫描
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
 public class LearnProjectMainClass {
 

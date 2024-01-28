@@ -2,6 +2,7 @@ package org.lyl.config.aspect;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -57,7 +58,8 @@ public class CommonAspect {
     public Object traceMethodAround(ProceedingJoinPoint joinPoint, LogTracing logTraceAnnotation) throws Throwable {
         Object result;
         try {
-            MDC.put(CommonConst.COMMON_TRACE_ID, LogMdcFilter.buildMDCTraceId());
+            String traceId = MDC.get(CommonConst.COMMON_TRACE_ID);
+            MDC.put(CommonConst.COMMON_TRACE_ID, StringUtils.isBlank(traceId)? LogMdcFilter.buildMDCTraceId() : traceId);
             result = joinPoint.proceed();
         } finally {
             MDC.clear();
@@ -87,7 +89,8 @@ public class CommonAspect {
 
 
     /**
-     * 3、after, 原生方法执行完毕之后，不管是否有异常都会执行
+     * 3、after,
+     * 特性：原生方法执行完毕之后，不管是否有异常都会执行
      *
      * @param joinPoint
      * @param logTraceAnnotation
