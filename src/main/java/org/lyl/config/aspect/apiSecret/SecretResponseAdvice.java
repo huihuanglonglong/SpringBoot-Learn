@@ -24,7 +24,7 @@ public class SecretResponseAdvice implements ResponseBodyAdvice {
     @Override
     public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType, Class aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
         // 判断是否需要加密
-        Boolean respSecret = SecretFilter.secretThreadLocal.get();
+        /*Boolean respSecret = SecretFilter.secretThreadLocal.get();
         String secretKey = SecretFilter.clientPrivateKeyThreadLocal.get();
         // 清理本地缓存
         SecretFilter.secretThreadLocal.remove();
@@ -49,7 +49,7 @@ public class SecretResponseAdvice implements ResponseBodyAdvice {
                     return SecretResponseBasic.fail(SECRET_API_ERROR, "", "服务端处理结果数据异常");
                 }
             }
-        }
+        }*/
         return o;
     }
 }

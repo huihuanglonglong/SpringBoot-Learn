@@ -36,14 +36,15 @@ public class SecretRequestAdvice extends RequestBodyAdviceAdapter {
     @Override
     public HttpInputMessage beforeBodyRead(HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) throws IOException {
         //如果支持加密消息，进行消息解密。
-        String httpBody;
+        /*String httpBody;
         if (Boolean.TRUE.equals(SecretFilter.secretThreadLocal.get())) {
             httpBody = decryptBody(inputMessage);
         } else {
             httpBody = StreamUtils.copyToString(inputMessage.getBody(), Charset.defaultCharset());
         }
         //返回处理后的消息体给messageConvert
-        return new SecretHttpMessage(new ByteArrayInputStream(httpBody.getBytes()), inputMessage.getHeaders());
+        return new SecretHttpMessage(new ByteArrayInputStream(httpBody.getBytes()), inputMessage.getHeaders());*/
+        return null;
     }
 
     /**
@@ -53,7 +54,7 @@ public class SecretRequestAdvice extends RequestBodyAdviceAdapter {
      * @return 明文
      */
     private String decryptBody(HttpInputMessage inputMessage) throws IOException {
-        InputStream encryptStream = inputMessage.getBody();
+        /*InputStream encryptStream = inputMessage.getBody();
         String requestBody = StreamUtils.copyToString(encryptStream, Charset.defaultCharset());
         // 验签过程
         HttpHeaders headers = inputMessage.getHeaders();
@@ -88,6 +89,7 @@ public class SecretRequestAdvice extends RequestBodyAdviceAdapter {
         } catch (Exception e) {
             log.error("error: ", e);
         }
-        throw new ResultException(SECRET_API_ERROR, "解密失败");
+        throw new ResultException(SECRET_API_ERROR, "解密失败");*/
+        return null;
     }
 }
