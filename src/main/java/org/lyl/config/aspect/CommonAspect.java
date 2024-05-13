@@ -54,7 +54,7 @@ public class CommonAspect {
      * @return
      * @throws Throwable
      */
-    @Around(value = "tracePoint(logTraceAnnotation)")
+    @Around(value = "tracePoint(logTraceAnnotation)", argNames = "joinPoint,logTraceAnnotation")
     public Object traceMethodAround(ProceedingJoinPoint joinPoint, LogTracing logTraceAnnotation) throws Throwable {
         Object result;
         try {
@@ -74,7 +74,7 @@ public class CommonAspect {
      * @param joinPoint 连接点，必须为方法的第一个参数
      * @param logTraceAnnotation 目标方法上的切入注解
      */
-    @Before(value = "tracePoint(logTraceAnnotation)")
+    @Before(value = "tracePoint(logTraceAnnotation)", argNames = "joinPoint,logTraceAnnotation")
     public void beforeTraceMethod(JoinPoint joinPoint, LogTracing logTraceAnnotation) {
         //目标类的全限定名称
         String className=joinPoint.getTarget().getClass().getName();
@@ -96,7 +96,7 @@ public class CommonAspect {
      * @param logTraceAnnotation
      * @return
      */
-    @After(value = "tracePoint(logTraceAnnotation)")
+    @After(value = "tracePoint(logTraceAnnotation)", argNames = "joinPoint,logTraceAnnotation")
     public Object afterTraceMethod(JoinPoint joinPoint, LogTracing logTraceAnnotation) {
         String methodName = joinPoint.getSignature().getName();
         log.info("after execute methodName = {}", methodName);
@@ -111,7 +111,7 @@ public class CommonAspect {
      * @param result
      * @return
      */
-    @AfterReturning(value = "tracePoint(logTraceAnnotation)", returning = "result")
+    @AfterReturning(value = "tracePoint(logTraceAnnotation)", returning = "result", argNames = "joinPoint,logTraceAnnotation,result")
     public Object afterTraceReturning(JoinPoint joinPoint, LogTracing logTraceAnnotation, Object result) {
         String methodName = joinPoint.getSignature().getName();
         log.info("afterReturning execute methodName = {}", methodName);
