@@ -35,8 +35,10 @@ public class SensitiveJsonSerializer extends StdSerializer<String> implements Co
     }
 
     /**
-     * 获取属性上的注解属性,
-     * 将每个需要解析的类Class缓存，并且为每一个序列化属性也缓存一个序列化器
+     * 获取属性上的注解属性, 当第一次解析对象class时，序列化对象每一个属性，会执行这个方法
+     *
+     * 将每个需要序列化字段匹配一个序列化器
+     *
      */
     @Override
     public JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property) {

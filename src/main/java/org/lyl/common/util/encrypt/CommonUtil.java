@@ -1,5 +1,8 @@
 package org.lyl.common.util.encrypt;
 
+import com.alibaba.druid.sql.visitor.functions.Char;
+import com.google.common.collect.Sets;
+import io.lettuce.core.StrAlgoArgs;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -7,13 +10,21 @@ import org.apache.commons.lang3.StringUtils;
 import javax.xml.bind.DatatypeConverter;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.TreeMap;
+import java.util.*;
 
 @Slf4j
 public class CommonUtil {
+
+
+    public static final Set<Class<?>> BASIC_CLASS = Sets.newHashSet(
+        byte.class, short.class, char.class, int.class, long.class, float.class, double.class, boolean.class,
+        Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Boolean.class
+    );
+
+
+    public static boolean isBasicClazz(Class<?> clazz) {
+        return BASIC_CLASS.contains(clazz);
+    }
 
     public static String jdkMD5(String src) {
         String res = null;

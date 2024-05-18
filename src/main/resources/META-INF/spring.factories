@@ -1,1 +1,3 @@
-org.springframework.context.ApplicationListener=org.lyl.listener.ConfigPropertyDecryptListener
+org.springframework.context.ApplicationListener=\
+  org.lyl.listener.ConfigPropertyDecryptListener,\
+  org.lyl.listener.LogBackSensitiveConvertEventListener

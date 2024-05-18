@@ -3,6 +3,7 @@ package org.lyl.scheduler;
 import lombok.extern.slf4j.Slf4j;
 import org.lyl.common.annotation.LogTracing;
 import org.lyl.common.util.DateTimeUtil;
+import org.lyl.entity.UserInfo;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -17,8 +18,10 @@ public class LogScheduler {
     public Integer testLogClean() {
         Integer resultTimes = 0;
         for (int i = 0; i < 10; i++) {
+            UserInfo userInfo = new UserInfo().setAddress("aaaa33333333333333aaaa").setPhoneNo("13632723246");
             String currentTime = DateTimeUtil.getCurrentStandardMillisTime();
             log.info("test logStr currentTime = {}, loop = {}, testLog = {}", currentTime, i, logStr);
+            log.info("test sensitive userInfo = {}", userInfo);
             resultTimes = i;
         }
         return resultTimes;

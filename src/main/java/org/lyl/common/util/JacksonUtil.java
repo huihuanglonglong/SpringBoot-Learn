@@ -73,10 +73,20 @@ public class JacksonUtil {
 
 
     // object ----> jsonStr
-    public static String obj2Json(Object obj) {
+    public static String obj2JsonByPrimary(Object obj) {
         String jsonStr = null;
         try {
             jsonStr = OBJECT_MAPPER.writeValueAsString(obj);
+        } catch (Exception e) {
+            log.error("obj2JsonByPrimary write str have error------>", e);
+        }
+        return jsonStr;
+    }
+
+    public static String obj2Json(ObjectMapper objectMapper, Object obj) {
+        String jsonStr = null;
+        try {
+            jsonStr = objectMapper.writeValueAsString(obj);
         } catch (Exception e) {
             log.error("jacksonUtil write str have error------>", e);
         }
