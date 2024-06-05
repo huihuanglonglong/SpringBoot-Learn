@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.lyl.common.util.ApplicationContextUtil;
 import org.lyl.common.util.JacksonUtil;
-import org.lyl.common.util.encrypt.CommonUtil;
+import org.lyl.common.util.CommonUtil;
 import org.slf4j.helpers.MessageFormatter;
 
 import java.util.Objects;

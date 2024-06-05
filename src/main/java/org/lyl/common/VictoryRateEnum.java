@@ -1,11 +1,9 @@
-package org.lyl.entity;
+package org.lyl.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.math.BigDecimal;
-import java.security.SecureRandom;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 @Getter

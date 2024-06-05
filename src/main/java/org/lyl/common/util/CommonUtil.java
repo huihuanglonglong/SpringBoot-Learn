@@ -1,16 +1,22 @@
-package org.lyl.common.util.encrypt;
+package org.lyl.common.util;
 
 import com.alibaba.druid.sql.visitor.functions.Char;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.lettuce.core.StrAlgoArgs;
+import io.reactivex.Completable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.collections4.Predicate;
 import org.apache.commons.lang3.StringUtils;
+import org.lyl.entity.UserInfo;
 
 import javax.xml.bind.DatatypeConverter;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class CommonUtil {
@@ -101,6 +107,57 @@ public class CommonUtil {
             buf.append(key).append("=").append(tempMap.get(key)).append("&");
         }
         return buf.substring(0, buf.length() - 1);
+    }
+
+
+    /**
+     *
+     * 用户自定义对象属性去重器
+     *
+     * @param fieldExtractFun
+     * @param <T>
+     * @param <R>
+     * @return
+     */
+    public static <T, R> Predicate<T> distinctBy(Function<T, R> fieldExtractFun) {
+        Map<R, Boolean> objFieldExistMap = Maps.newHashMap();
+        return sourceObj -> Objects.isNull(objFieldExistMap.putIfAbsent(fieldExtractFun.apply(sourceObj), Boolean.TRUE));
+    }
+
+
+    /**
+     * 复杂的集合运算
+     * 多重分组，组合之后在计算
+     *
+     * @param userInfos
+     * @return
+     */
+    public static Map<Date, Map<String, Integer>> multiGroupCompute(List<UserInfo> userInfos) {
+        return userInfos.stream().collect(Collectors.groupingBy(UserInfo::getBirthDate,
+            Collectors.groupingBy(UserInfo::getAddress, Collectors.collectingAndThen(Collectors.toList(), CommonUtil::sumGroupAmount))));
+    }
+
+    private static Integer sumGroupAmount(List<UserInfo> groupUserInfos) {
+        return groupUserInfos.stream().mapToInt(UserInfo::getAmount).sum();
+    }
+
+
+    /**
+     * 将一个普通的Map 转成一个通过value的Map
+     *
+     * @param sourceMap
+     * @param needReverse
+     * @param <K>
+     * @param <V>
+     * @return
+     */
+    public static <K, V extends Comparable<V>> Map<K, V> convertMap2ValSortedMap(Map<K, V> sourceMap, boolean needReverse) {
+        if (MapUtils.isEmpty(sourceMap)) {
+            return Maps.newLinkedHashMap();
+        }
+        Comparator<V> comparator = needReverse ? Collections.reverseOrder() : Comparator.naturalOrder();
+        return sourceMap.entrySet().stream().sorted(Map.Entry.comparingByValue(comparator))
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldVal, newVal) -> newVal, LinkedHashMap::new));
     }
 
 
