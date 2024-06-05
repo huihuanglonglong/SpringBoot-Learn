@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.collections4.Predicate;
 import org.apache.commons.lang3.StringUtils;
+import org.lyl.constant.DataOpTypeEnum;
 import org.lyl.entity.UserInfo;
 
 import javax.xml.bind.DatatypeConverter;
@@ -158,6 +159,48 @@ public class CommonUtil {
         Comparator<V> comparator = needReverse ? Collections.reverseOrder() : Comparator.naturalOrder();
         return sourceMap.entrySet().stream().sorted(Map.Entry.comparingByValue(comparator))
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldVal, newVal) -> newVal, LinkedHashMap::new));
+    }
+
+
+    /**
+     *
+     * 分离两个集合中，新增，删除，修改的数据
+     * 不改变原有的集合
+     *
+     * @param oldCollect
+     * @param newCollect
+     * @param <T>
+     * @return
+     */
+    public static <T> Map<String, Set<T>> splitCollections(Collection<T> oldCollect, Collection<T> newCollect) {
+        Map<String, Set<T>> splitMap = Maps.newHashMap();
+
+        splitMap.put(DataOpTypeEnum.ADD.getOpType(), Sets.newHashSet());
+        splitMap.put(DataOpTypeEnum.DELETE.getOpType(), Sets.newHashSet());
+        splitMap.put(DataOpTypeEnum.UPDATE.getOpType(), Sets.newHashSet());
+
+        if (!(oldCollect instanceof Set)) {
+            oldCollect = Sets.newHashSet(oldCollect);
+        }
+        if (!(newCollect instanceof Set)) {
+            newCollect = Sets.newHashSet(newCollect);
+        }
+
+        for (T sourceData : oldCollect) {
+            String opType = newCollect.contains(sourceData) ? DataOpTypeEnum.UPDATE.getOpType() : DataOpTypeEnum.DELETE.getOpType();
+            Set<T> determineCollect = splitMap.get(opType);
+            determineCollect.add(sourceData);
+        }
+
+        Set<T> updateList = splitMap.get(DataOpTypeEnum.UPDATE.getOpType());
+        log.info("splitCollections update size = {}", updateList.size());
+
+        newCollect.forEach(compareData -> {
+            if (!updateList.contains(compareData)) {
+                splitMap.get(DataOpTypeEnum.ADD.getOpType()).add(compareData);
+            }
+        });
+        return splitMap;
     }
 
 

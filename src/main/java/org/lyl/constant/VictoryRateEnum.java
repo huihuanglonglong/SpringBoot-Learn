@@ -1,4 +1,4 @@
-package org.lyl.common;
+package org.lyl.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

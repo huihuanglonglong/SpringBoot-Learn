@@ -48,4 +48,17 @@ public class LearnProjectMainClass {
         logger.info("BeanLifeConfig = {}", bean);
     }
 
+
+    /**
+     * Spring学习
+     * 1、BeanFactoryPostProcessor 和 BeanPostProcessor 之间的区别？
+     *   https://blog.csdn.net/ruangongtaotao/article/details/135911902
+     *   https://blog.csdn.net/weixin_53287520/article/details/139484810
+     *
+     *
+     *
+     *
+     */
+
+
 }
