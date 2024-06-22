@@ -16,8 +16,9 @@ public class UserInfo {
 
     private String userNamePrefix;
 
-
     private Date birthDate;
+
+    private String birthDateTime;
 
 
     @JacksonSensitive(strategy = SensitiveStrategy.PHONE)

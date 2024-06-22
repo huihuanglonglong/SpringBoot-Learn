@@ -44,8 +44,7 @@ public class ApplicationContextUtil implements ApplicationContextAware {
 
 
     public static <T> Map<String, T> getBeansByType(Class<T> clazz) {
-        Map<String, T> beanMap = context.getBeansOfType(clazz);
-        return beanMap;
+        return context.getBeansOfType(clazz);
     }
 
     /**

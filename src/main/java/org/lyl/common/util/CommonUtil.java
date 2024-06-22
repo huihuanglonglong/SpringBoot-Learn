@@ -1,10 +1,8 @@
 package org.lyl.common.util;
 
-import com.alibaba.druid.sql.visitor.functions.Char;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import io.lettuce.core.StrAlgoArgs;
-import io.reactivex.Completable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.collections4.Predicate;
@@ -33,6 +31,7 @@ public class CommonUtil {
         return BASIC_CLASS.contains(clazz);
     }
 
+    // MD5加密
     public static String jdkMD5(String src) {
         String res = null;
         try {
@@ -46,6 +45,7 @@ public class CommonUtil {
     }
 
 
+    // Sha256摘要
     public static String sha256(String src) {
         StringBuilder sb = new StringBuilder();
         try {
@@ -126,14 +126,16 @@ public class CommonUtil {
     }
 
 
+    /***********************************  常用的复杂集合运算工具汇总  **********************************************/
+
     /**
-     * 复杂的集合运算
+     *
      * 多重分组，组合之后在计算
      *
      * @param userInfos
      * @return
      */
-    public static Map<Date, Map<String, Integer>> multiGroupCompute(List<UserInfo> userInfos) {
+    public static Map<Date, Map<String, Integer>> collectionMultiGroupCompute(List<UserInfo> userInfos) {
         return userInfos.stream().collect(Collectors.groupingBy(UserInfo::getBirthDate,
             Collectors.groupingBy(UserInfo::getAddress, Collectors.collectingAndThen(Collectors.toList(), CommonUtil::sumGroupAmount))));
     }
@@ -142,9 +144,44 @@ public class CommonUtil {
         return groupUserInfos.stream().mapToInt(UserInfo::getAmount).sum();
     }
 
+    /**
+     * 按照时间单分组，自定义出参集合，按照指定逻辑计算存入集合，
+     * 针对多线程场景可以使用，最后的结果集合并
+     *
+     * @param sourceUserInfos
+     * @return
+     */
+    public static Map<String, List<UserInfo>> collectionGroupBy2SortMap(List<UserInfo> sourceUserInfos) {
+       return sourceUserInfos.stream().collect(CommonUtil::supplyDateTimeSortedMap,
+          (sortMap, userInfo) -> sortMap.computeIfAbsent(userInfo.getBirthDateTime(), birthDateTime -> Lists.newArrayList()).add(userInfo), Map::putAll);
+    }
+
+    private static TreeMap<String, List<UserInfo>> supplyDateTimeSortedMap() {
+        return new TreeMap<>(Comparator.comparing(dataTimeStr ->
+            DateTimeUtil.getDateFromTimeStr(dataTimeStr, DateTimeUtil.STANDARD_TIME_FORMAT)));
+    }
 
     /**
-     * 将一个普通的Map 转成一个通过value的Map
+     * 按照类型分组，求每个分组的计数量, ---求每个分组数据求、最大，最小值
+     *
+     * @param sourceUserInfos
+     * @return
+     */
+    public static Map<String, Long> collectionGroup2CountMap(List<UserInfo> sourceUserInfos) {
+        Map<String, Optional<UserInfo>> maxAmountMap = sourceUserInfos.stream().collect(Collectors.groupingBy(UserInfo::getUserNamePrefix,
+                Collectors.maxBy(Comparator.comparing(UserInfo::getAmount))));
+        log.info("maxAmountMap  = {}", maxAmountMap);
+
+        Map<String, Set<String>> namePrefixSetMap = sourceUserInfos.stream().collect(Collectors.groupingBy(UserInfo::getAddress,
+            Collectors.mapping(UserInfo::getUserNamePrefix, Collectors.toSet())));
+        log.info("namePrefixSetMap = {}", namePrefixSetMap);
+
+        return sourceUserInfos.stream().collect(Collectors.groupingBy(UserInfo::getUserNamePrefix, Collectors.counting()));
+    }
+
+
+    /**
+     * 将一个普通的Map 转成一个通过value排序的LInkedHashMap
      *
      * @param sourceMap
      * @param needReverse

@@ -1,24 +1,29 @@
 package org.lyl.common.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import lombok.extern.slf4j.Slf4j;
 
-import java.io.UTFDataFormatException;
+import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Stream;
 
+@Slf4j
 public class DateTimeUtil {
 
     public static final String STANDARD_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     public static final String STANDARD_MILLIS_FORMAT = "yyyy-MM-dd HH:mm:ss:SSS";
 
-    public static final String STANDARD_MONTH_FORMAT = "yyyy-MM-dd";
+    public static final String STANDARD_DATE_FORMAT = "yyyy-MM-dd";
+
+    public static final String STANDARD_MONTH_FORMAT = "yyyy-MM";
 
     public static final String STANDARD_UTC_FORMAT = "yyy-MM-dd'T'HH:mm:ss:SSS'Z'";
 
@@ -33,6 +38,7 @@ public class DateTimeUtil {
     static {
         TIME_FORMATTER_MAP.put(STANDARD_TIME_FORMAT, DateTimeFormatter.ofPattern(STANDARD_TIME_FORMAT));
         TIME_FORMATTER_MAP.put(STANDARD_MILLIS_FORMAT, DateTimeFormatter.ofPattern(STANDARD_MILLIS_FORMAT));
+        TIME_FORMATTER_MAP.put(STANDARD_DATE_FORMAT, DateTimeFormatter.ofPattern(STANDARD_DATE_FORMAT));
         TIME_FORMATTER_MAP.put(STANDARD_MONTH_FORMAT, DateTimeFormatter.ofPattern(STANDARD_MONTH_FORMAT));
         TIME_FORMATTER_MAP.put(STANDARD_UTC_FORMAT, DateTimeFormatter.ofPattern(STANDARD_UTC_FORMAT));
         TIME_FORMATTER_MAP.put(NUM_SECOND_FORMAT, DateTimeFormatter.ofPattern(NUM_SECOND_FORMAT));
@@ -59,8 +65,14 @@ public class DateTimeUtil {
     }
 
     // str ---> Date
-    public static Date strToDateByFormat(String dateStr, String format) {
-        return Date.from(LocalDateTime.parse(dateStr, TIME_FORMATTER_MAP.get(format)).atZone(DEFAULT_ZONE_ID).toInstant());
+    public static Date getDateFromTimeStr(String dateTime, String dateTimeFormat) {
+        Date resultDate = null;
+        try {
+            resultDate = new SimpleDateFormat(dateTimeFormat).parse(dateTime);
+        } catch (Exception e) {
+            log.error("getDateFromTimeStr have error------>", e);
+        }
+        return resultDate;
     }
 
     // 获取当前系统0点时间
@@ -180,6 +192,8 @@ public class DateTimeUtil {
         for (int i=0; i<result.length; i++) {
             System.out.println(result[i]);
         }
+        Date date = getDateFromTimeStr("2024-06-16", DateTimeUtil.STANDARD_DATE_FORMAT);
+        System.out.println("date = " + date);
     }
 
 }
