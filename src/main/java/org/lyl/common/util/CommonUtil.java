@@ -240,6 +240,15 @@ public class CommonUtil {
         return splitMap;
     }
 
+    /**
+     * 列表实现多重排序
+     *
+     * @param userInfos
+     */
+    public static void multiSort(List<UserInfo> userInfos) {
+        userInfos.sort(Comparator.comparing(UserInfo::getBirthDate).thenComparing(UserInfo::getAmount));
+    }
+
 
     public static void main(String[] args) {
         String url = "https://localhost:8000/test1?key5=val5&key4=val4&key1=val1&key2=val2&key3=val3";
@@ -249,6 +258,8 @@ public class CommonUtil {
 
         String sortedParamStr = buildSortedParamStr(paramMap);
         System.out.println("sortedParamStr = " +sortedParamStr);
+        String sha256Result = sha256("laoWang");
+        System.out.println("sha256Result = " + sha256Result);
     }
 
 

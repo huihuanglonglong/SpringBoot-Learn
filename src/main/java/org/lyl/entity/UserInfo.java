@@ -16,6 +16,8 @@ public class UserInfo {
 
     private String userNamePrefix;
 
+    private String userName;
+
     private Date birthDate;
 
     private String birthDateTime;
