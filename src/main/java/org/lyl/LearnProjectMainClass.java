@@ -38,11 +38,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @SpringBootApplication
 @EnableTransactionManagement // 开启事务注解扫描
-@EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
+@EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true) // 自定义的AOP需要开启
 public class LearnProjectMainClass {
 
     private static Logger logger = LoggerFactory.getLogger(LearnProjectMainClass.class);
-
     public static void main(String[] args) {
         System.setProperty("config.property.pass", "AES_sourceKey#2024");
         ConfigurableApplicationContext run = SpringApplication.run(LearnProjectMainClass.class, args);

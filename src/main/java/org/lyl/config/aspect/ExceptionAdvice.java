@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice(basePackages = "org.lyl")
 public class ExceptionAdvice {
 
-    @ExceptionHandler(Exception.class)
     @ResponseBody
+    @ExceptionHandler(Exception.class)
     public Response<Void> arithmeticExceptionAdvice(Exception e) {
         String message = e.getMessage();
         return Response.error(message);
